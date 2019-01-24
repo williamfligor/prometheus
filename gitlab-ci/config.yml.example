@@ -1,0 +1,15 @@
+# URL and Token with sufficient permissions to access your GitLab's projects
+# pipelines informations
+gitlab:
+  url: https://gitlab.com
+  token: <token>
+
+# Waiting time between polls for each projects
+polling_interval_seconds: 30
+
+# The list of the projects you want to monitor
+projects:
+  - name: example/proj1
+    ref: master
+  - name: example/subgroup1/proj2
+    ref: master

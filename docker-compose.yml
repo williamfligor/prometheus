@@ -26,6 +26,7 @@ services:
             - alertmanager:alertmanager
         depends_on:
             - cadvisor
+            - gitlab
         networks:
             - back-tier
         restart: always
@@ -74,4 +75,13 @@ services:
             - front-tier
         restart: always
 
+    gitlab:
+        image: mvisonneau/gitlab-ci-pipelines-exporter
+        command: -config /etc/config.yml
+        volumes:
+            - ./gitlab-ci/config.yml:/etc/config.yml
+        ports: 
+            - 9999:80
+        networks:
+            - back-tier
 

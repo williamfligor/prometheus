@@ -28,3 +28,13 @@ scrape_configs:
       static_configs:
         - targets:
             - 'cadvisor:8080'
+    - job_name: gitlab
+      scrape_interval: 5s
+      dns_sd_configs:
+        - names:
+            - tasks.gitlab
+          type: A
+          port: 9999
+      static_configs:
+        - targets:
+            - 'gitlab:80'

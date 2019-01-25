@@ -32,4 +32,4 @@ scrape_configs:
       scrape_interval: 5s
       static_configs:
         - targets:
-            - 'gitlab:80'
+            - '192.168.11.200:9118'

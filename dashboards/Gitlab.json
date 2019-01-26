@@ -193,7 +193,7 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 0,
+        "col": 10,
         "desc": true
       },
       "styles": [
@@ -252,6 +252,22 @@
           "unit": "short"
         },
         {
+          "alias": "Days since update",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value #A",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
           "alias": "",
           "colorMode": null,
           "colors": [
@@ -270,7 +286,7 @@
       ],
       "targets": [
         {
-          "expr": "gitlab_merge_request_state{wip=\"False\"}",
+          "expr": "gitlab_merge_request_state{wip=\"False\"}+0",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -280,7 +296,7 @@
           "refId": "B"
         },
         {
-          "expr": "",
+          "expr": "(time() * 1000 - gitlab_merge_request_updated_at{wip=\"False\"}+0) / (1000 * 24 * 60 * 60)",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -722,6 +738,129 @@
       "columns": [],
       "fontSize": "100%",
       "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 0,
+        "y": 9
+      },
+      "id": 26,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "path",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "user",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "Access level",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "Guest",
+              "value": "10"
+            },
+            {
+              "text": "Reporter",
+              "value": "20"
+            },
+            {
+              "text": "Developer",
+              "value": "30"
+            },
+            {
+              "text": "Maintainer",
+              "value": "40"
+            },
+            {
+              "text": "Owner",
+              "value": "50"
+            }
+          ]
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "gitlab_membership",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "title": "Membership",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "fontSize": "100%",
+      "gridPos": {
         "h": 7,
         "w": 16,
         "x": 8,
@@ -928,5 +1067,5 @@
   "timezone": "",
   "title": "Gitlab",
   "uid": "Ys7cokliz",
-  "version": 24
+  "version": 28
 }

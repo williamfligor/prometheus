@@ -30,6 +30,11 @@ services:
         networks:
             - back-tier
         restart: always
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "30m"
+                max-file: "10"
 
     alertmanager:
         image: prom/alertmanager
@@ -43,6 +48,12 @@ services:
         command:
             - '--config.file=/etc/alertmanager/config.yml'
             - '--storage.path=/alertmanager'
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "30m"
+                max-file: "10"
+
     cadvisor:
         image: google/cadvisor
         volumes:
@@ -57,6 +68,11 @@ services:
         restart: always
         deploy:
             mode: global
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "30m"
+                max-file: "10"
 
     grafana:
         image: grafana/grafana
@@ -74,6 +90,11 @@ services:
             - back-tier
             - front-tier
         restart: always
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "30m"
+                max-file: "10"
 
     node-exporter:
         image: prom/node-exporter
@@ -91,6 +112,11 @@ services:
         restart: always
         deploy:
             mode: global
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "30m"
+                max-file: "10"
 
     gitlab:
         image: mvisonneau/gitlab-ci-pipelines-exporter
@@ -99,4 +125,9 @@ services:
             - ./gitlab-ci/config.yml:/etc/config.yml
         networks:
             - back-tier
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "30m"
+                max-file: "10"
 

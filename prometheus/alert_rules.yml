@@ -1,0 +1,32 @@
+groups:
+    - name: system_monitoring
+      rules:
+        # Alert for any instance that is unreachable for >2 minutes.
+        - alert: service_down
+          expr: up == 0
+          for: 2m
+          labels:
+            severity: page
+          annotations:
+            summary: "Instance {{ $labels.instance }} down"
+            description: "{{ $labels.instance }} has been down for more than 2 minutes."
+
+        # Alert on server with disk space lower than 10gb
+        - alert: disk_space_low
+          expr: node_filesystem_avail_bytes{fstype="rootfs"} < 10e9
+          for: 2m
+          labels:
+            severity: page
+          annotations:
+            summary: "Instance {{ $labels.instance }} is low on disk space"
+            description: "{{ $labels.instance }} is low on disk space."
+
+        # Alert on server with free memory lower than 1gb
+        - alert: memory_low
+          expr: node_memory_MemAvailable_bytes < 1e9
+          for: 2m
+          labels:
+            severity: page
+          annotations:
+            summary: "Instance {{ $labels.instance }} is low on free memory"
+            description: "{{ $labels.instance }} is low on free memory"

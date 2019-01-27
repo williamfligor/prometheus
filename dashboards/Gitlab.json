@@ -16,6 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 5,
+  "iteration": 1548556389888,
   "links": [],
   "panels": [
     {
@@ -78,7 +79,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(gitlab_pipeline_status2)==1 or vector(0)",
+          "expr": "count(gitlab_pipeline_status{project=~\"$Path.*\"}==1) or vector(0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -158,7 +159,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(gitlab_pipeline_status2)==0 or vector(0)",
+          "expr": "count(gitlab_pipeline_status{project=~\"$Path.*\"}==0) or vector(0)",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -253,17 +254,20 @@
         },
         {
           "alias": "Days since update",
-          "colorMode": null,
+          "colorMode": "row",
           "colors": [
-            "rgba(245, 54, 54, 0.9)",
+            "rgba(50, 172, 45, 0.97)",
             "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
+            "rgba(245, 54, 54, 0.9)"
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
           "mappingType": 1,
           "pattern": "Value #A",
-          "thresholds": [],
+          "thresholds": [
+            "1",
+            "3"
+          ],
           "type": "number",
           "unit": "short"
         },
@@ -286,7 +290,7 @@
       ],
       "targets": [
         {
-          "expr": "gitlab_merge_request_state{wip=\"False\"}+0",
+          "expr": "gitlab_merge_request_state{wip=\"False\", project=~\"$Path.*\"}+0",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -296,7 +300,7 @@
           "refId": "B"
         },
         {
-          "expr": "(time() * 1000 - gitlab_merge_request_updated_at{wip=\"False\"}+0) / (1000 * 24 * 60 * 60)",
+          "expr": "(time() * 1000 - gitlab_merge_request_updated_at{wip=\"False\", project=~\"$Path.*\"}+0) / (1000 * 24 * 60 * 60)",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -368,7 +372,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(gitlab_ci_pipeline_status{ref=\"master\",status=\"master\"}==1) OR vector(0)",
+          "expr": "count(gitlab_ci_pipeline_status{ref=\"master\",status=\"master\",project=~\"$Path.*\"}==1) OR vector(0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -448,7 +452,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(gitlab_ci_pipeline_status{ref=\"develop\",status=\"failed\"}==1) OR vector(0)",
+          "expr": "count(gitlab_ci_pipeline_status{ref=\"develop\",status=\"failed\",project=~\"$Path.*\"}==1) OR vector(0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -528,7 +532,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(gitlab_issue_state{assigned_user=\"None\"}==0) or vector(0)",
+          "expr": "count(gitlab_issue_state{assigned_user=\"None\", project=~\"$Path.*\"}==0) or vector(0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -608,7 +612,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(gitlab_merge_request_state==0) or vector(0)",
+          "expr": "count(gitlab_merge_request_state{project=~\"$Path.*\"}==0) or vector(0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
@@ -633,238 +637,9 @@
       "fontSize": "100%",
       "gridPos": {
         "h": 7,
-        "w": 5,
-        "x": 8,
-        "y": 7
-      },
-      "id": 20,
-      "links": [],
-      "pageSize": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 2,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "expr": "sort(count(gitlab_issue_state{assigned_user!=\"None\"}==0) by (assigned_user))",
-          "format": "table",
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "title": "User Issue Counts",
-      "transform": "table",
-      "type": "table"
-    },
-    {
-      "columns": [],
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 7,
-        "w": 5,
-        "x": 13,
-        "y": 7
-      },
-      "id": 23,
-      "links": [],
-      "pageSize": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 2,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "expr": "sort(count(gitlab_merge_request_state{assigned_user!=\"None\"}==0) by (assigned_user))",
-          "format": "table",
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "title": "User Merge Request Counts",
-      "transform": "table",
-      "type": "table"
-    },
-    {
-      "columns": [],
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 12,
-        "w": 8,
-        "x": 0,
-        "y": 9
-      },
-      "id": 26,
-      "links": [],
-      "pageSize": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 0,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "path",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "user",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Access level",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short",
-          "valueMaps": [
-            {
-              "text": "Guest",
-              "value": "10"
-            },
-            {
-              "text": "Reporter",
-              "value": "20"
-            },
-            {
-              "text": "Developer",
-              "value": "30"
-            },
-            {
-              "text": "Maintainer",
-              "value": "40"
-            },
-            {
-              "text": "Owner",
-              "value": "50"
-            }
-          ]
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "expr": "gitlab_membership",
-          "format": "table",
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "title": "Membership",
-      "transform": "table",
-      "type": "table"
-    },
-    {
-      "columns": [],
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 7,
         "w": 16,
         "x": 8,
-        "y": 14
+        "y": 7
       },
       "hideTimeOverride": false,
       "id": 13,
@@ -873,7 +648,7 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 0,
+        "col": 9,
         "desc": true
       },
       "styles": [
@@ -917,17 +692,20 @@
         },
         {
           "alias": "Status",
-          "colorMode": null,
+          "colorMode": "cell",
           "colors": [
+            "rgba(50, 172, 45, 0.97)",
             "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
+            "#2f575e"
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
           "mappingType": 1,
           "pattern": "Value #A",
-          "thresholds": [],
+          "thresholds": [
+            "3",
+            "4"
+          ],
           "type": "string",
           "unit": "short",
           "valueMaps": [
@@ -988,6 +766,22 @@
           "unit": "short"
         },
         {
+          "alias": "Created",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value #C",
+          "thresholds": [],
+          "type": "date",
+          "unit": "short"
+        },
+        {
           "alias": "",
           "colorMode": null,
           "colors": [
@@ -1006,7 +800,7 @@
       ],
       "targets": [
         {
-          "expr": "gitlab_pipeline_duration+0",
+          "expr": "gitlab_pipeline_duration{project=~\"$Path.*\"}+0",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1016,15 +810,251 @@
           "refId": "B"
         },
         {
-          "expr": "gitlab_pipeline_status2+0",
+          "expr": "gitlab_pipeline_status{project=~\"$Path.*\"}+0",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
+        },
+        {
+          "expr": "gitlab_pipeline_created_at{project=~\"$Path.*\"}+0",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "C"
         }
       ],
       "title": "Latest Pipeline Status",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 9
+      },
+      "id": 26,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 4,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "path",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "user",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "Access",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "Guest",
+              "value": "10"
+            },
+            {
+              "text": "Reporter",
+              "value": "20"
+            },
+            {
+              "text": "Developer",
+              "value": "30"
+            },
+            {
+              "text": "Maintainer",
+              "value": "40"
+            },
+            {
+              "text": "Owner",
+              "value": "50"
+            }
+          ]
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "gitlab_membership{path=~\"$Path.*\"}",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "title": "Membership",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 8,
+        "y": 14
+      },
+      "id": 20,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 2,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "sort(count(gitlab_issue_state{assigned_user!=\"None\",project=~\"$Path.*\"}==0) by (assigned_user))",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "title": "User Issue Counts",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 13,
+        "y": 14
+      },
+      "id": 23,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 2,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "sort(count(gitlab_merge_request_state{assigned_user!=\"None\", project=~\"$Path.*\"}==0) by (assigned_user))",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "title": "User Merge Request Counts",
       "transform": "table",
       "type": "table"
     }
@@ -1033,7 +1063,35 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "tags": [],
+          "text": "srver.co",
+          "value": "srver.co"
+        },
+        "datasource": "Prometheus",
+        "definition": "gitlab_path",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "Path",
+        "options": [],
+        "query": "gitlab_path",
+        "refresh": 1,
+        "regex": "/.*path=\"([^\"]*).*/",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -1067,5 +1125,5 @@
   "timezone": "",
   "title": "Gitlab",
   "uid": "Ys7cokliz",
-  "version": 28
+  "version": 45
 }

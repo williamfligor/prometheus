@@ -30,3 +30,13 @@ groups:
           annotations:
             summary: "Instance {{ $labels.instance }} is low on free memory"
             description: "{{ $labels.instance }} is low on free memory"
+
+        # Alert on gitlab runner down
+        - alert: gitlab_runner_down
+          expr: gitlab_runner_status >= 2
+          for: 2m
+          labels:
+            severity: page
+          annotations:
+            summary: "Gitlab runner {{ $labels.name}} {{ $labels.id }} is down"
+            description: "{{ $labels.name}} {{ $labels.instance }} is down"

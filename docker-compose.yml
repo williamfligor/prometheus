@@ -119,12 +119,15 @@ services:
                 max-file: "10"
 
     gitlab:
-        image: mvisonneau/gitlab-ci-pipelines-exporter
-        command: -config /etc/config.yml
+        image: registry.gitlab.com/williamfligor/gitlab-collector
         volumes:
-            - ./gitlab-ci/config.yml:/etc/config.yml
+            - ./gitlab-ci/config.yml:/app/config.cfg
+        ports:
+            - 9118:9118
         networks:
             - back-tier
+        environment:
+            - PYTHONUNBUFFERED=1
         logging:
             driver: "json-file"
             options:
